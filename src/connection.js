@@ -252,15 +252,6 @@ function Connection(options, queues = {}, { onopen = noop, onend = noop, onclose
   }
 
   function nextWrite(fn) {
-    if (!socket) {
-      chunk = nextWriteTimer = null
-      // If socket is null and we have pending queries, it means the connection
-      // was closed unexpectedly. We need to report this error.
-      if (query || sent.length) {
-        error(Errors.connection('CONNECTION_CLOSED', options, socket))
-      }
-      return
-    }
     const x = socket.write(chunk, fn)
     nextWriteTimer !== null && clearImmediate(nextWriteTimer)
     chunk = nextWriteTimer = null
